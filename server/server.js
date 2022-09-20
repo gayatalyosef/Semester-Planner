@@ -10,11 +10,12 @@ app.use(bodyParse.json())
 
 /* represents one choice option for the course (lesston + practice time slot option) */
 let courseTimeSlot = class{
-    constructor(cousreNumber, semester, facName, facId, lesson, practice){
-        this.cousreNumber = cousreNumber;
+    constructor(courseNumber, courseName, semester, facName, facId, lesson, practice){
+        this.courseNumber = courseNumber;
+        this.courseName = courseName;
         this.semester = semester;
         this.facName = facName;
-        this.facId;
+        this.facId = facId;
         this.lesson = lesson; //timeSlot object
         this.practice = practice; // list of timeSlot objects
     }
@@ -81,79 +82,94 @@ app.post('/courseDetails' , async (req, res) => {
     await page.goto("https://www.ims.tau.ac.il/tal/kr/search_p.aspx");
     await page.type('input[name = "txtKurs"]', req.body.number);
     await page.click('#search');
+    console.log("opened page ");
+    try{
+        const elem = await page.$("#frmgrid");
+        console.log(" got frmgrid try");
+
+    } catch{
+        console.log("failed");
+    }
     const elem = await page.$("#frmgrid");
-    let data = await elem.$eval('table tbody', tbody => [...tbody.rows].map(r => [...r.cells].map(c => c.innerText)));
- 
-    while (i < data.length){
-        if (data[i].length != 1 && data[i][0].slice(0,6) == 'סילבוס'){ 
-            index = -1;
-            if(semester == req.body.semester){
-                if (isLesson){
-                    lesson = new timeSlot(groupId, times, profName);
-                    record = new courseTimeSlot(req.body.number, req.body.semester, facName, facIds[facName], lesson, null);
-                    output.push(record);
-                    if (hasPractices){
-                        //last record has practices
-                        currRecord = output.pop();
-                        prevRecord = output.pop();
-                        prevRecord.setPractice(practice);
-                        output.push(prevRecord);
-                        output.push(currRecord);
-                        practice = [];
-                        hasPractices = false;
+    if (await elem.$('div[class = "msgerrs rounddiv"]') !== null){
+        output.push("course not found error");
+        console.log("course not found");
+        res.json(output);
+    } else{
+        let data = await elem.$eval('table tbody', tbody => [...tbody.rows].map(r => [...r.cells].map(c => c.innerText)));
+        while (i < data.length){
+            if (data[i].length != 1 && data[i][0].slice(0,6) == 'סילבוס'){ 
+                index = -1;
+                if(semester == req.body.semester){
+                    if (isLesson){
+                        lesson = new timeSlot(groupId, times, profName);
+                        record = new courseTimeSlot(req.body.number, name, req.body.semester, facName, facIds[facName], lesson, []);
+                        output.push(record);
+                        if (hasPractices){
+                            //last record has practices
+                            currRecord = output.pop();
+                            prevRecord = output.pop();
+                            prevRecord.setPractice(practice);
+                            output.push(prevRecord);
+                            output.push(currRecord);
+                            practice = [];
+                            hasPractices = false;
+                        }
+                    } else{
+                        //add practice to practice list
+                        practice.push(new timeSlot(groupId, times, profName));
+                        hasPractices = true;
                     }
-                } else{
-                    //add practice to practice list
-                    practice.push(new timeSlot(groupId, times, profName));
-                    hasPractices = true;
                 }
-            }
-            times = []
-            
-        } else{
-            if (index == 1){
-                groupId = data[i][0].slice(-2);
-                name = data[i][1];
-            }
-            else if (index == 2){
-                var slashIndex = JSON.stringify(data[i][1]).indexOf("/");
-                if(slashIndex != -1){
-                    facName = data[i][1].slice(0, slashIndex-1);
-                } else{
-                    facName = data[i][1];
+                times = []
+                
+            } else{
+                if (index == 1){
+                    groupId = data[i][0].slice(-2);
+                    name = data[i][1];
                 }
-            }
-            else if (index >= 4){
-                if (index == 4){
-                    profName = JSON.stringify(data[i][0]);
+                else if (index == 2){
+                    var slashIndex = JSON.stringify(data[i][1]).indexOf("/");
+                    if(slashIndex != -1){
+                        facName = data[i][1].slice(0, slashIndex-1);
+                    } else{
+                        facName = data[i][1];
+                    }
                 }
-                if (data[i][1] == 'שיעור'){
-                    isLesson = true;
-                } else{
-                    isLesson = false;
+                else if (index >= 4){
+                    if (index == 4){
+                        profName = JSON.stringify(data[i][0]);
+                        profName = profName.slice(1,-1);
+                        profName = profName.replace(/\\/g, "");
+                    }
+                    if (data[i][1] == 'שיעור' || data[i][1] == 'שיעור ותרגיל'){
+                        isLesson = true;
+                    } else{
+                        isLesson = false;
+                    }
+                    var day = data[i][4];
+                    var time = data[i][5];
+                    times.push([day, time]); //one lesson/practice can be seperated to multiple days
+                    semester = semesterTrans[data[i][6]];                
                 }
-                var day = data[i][4];
-                var time = data[i][5];
-                times.push([day, time]); //one lesson/practice can be seperated to multiple days
-                semester = semesterTrans[data[i][6]];                
+                ++index;
             }
-            ++index;
+
+            ++i;
         }
 
-        ++i;
-    }
+        if(hasPractices){
+            prevRecord = output.pop();
+            prevRecord.setPractice(practice);
+            output.push(prevRecord);
+        }
 
-    if(hasPractices){
-        prevRecord = output.pop();
-        prevRecord.setPractice(practice);
-        output.push(prevRecord);
-    }
-
-    res.json(output);
-})
+        res.json(output);
+        }
+}) 
 
 
 
-app.listen(PORT, () => {console.log("server started on port", PORT)})
+app.listen(PORT, () => {console.log("server started on port", PORT)});
 
 
