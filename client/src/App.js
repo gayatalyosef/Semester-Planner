@@ -1,6 +1,6 @@
 import React from 'react';
 import 'animate.css';
-import { animate } from 'framer-motion';
+import BidingAdvicor from './BidingAdvicor';
 
 class course{
   constructor(name, number, faculltyId, semester, profName, color){
@@ -15,7 +15,7 @@ class course{
 }
 
 function App(){
-  const examplaeCourse = new course("product security and digital", "03683079", "0300", "a", "", "#accc");
+  //const examplaeCourse = new course("product security and digital", "03683079", "0300", "a", "", "#accc");
   //const linearExample = new course("linear algebra 1a", "03661111", "0300", "a", "", "#accc");
 
   /* states */
@@ -24,7 +24,7 @@ function App(){
     list: [],
     ids: []});
   const [optionsDisplay, setDispaly] = React.useState({});
-  const [colors, updateColors] = React.useState(["#9DBBEA", "#FFFFD8","#FF9AA2", "#FFDAC1","#B5EAD7", "#C7CEEA", "#C6F1FE"]);
+  const [colors, updateColors] = React.useState(["#B9E9E3","#F8C8DC","#9DBBEA", "#FFFFD8","#FF9AA2", "#FFDAC1","#B5EAD7", "#C7CEEA", "#C6F1FE"]);
 
   /* input helpers */
 
@@ -63,7 +63,6 @@ function App(){
             const myColor = newColors.pop();
             newColors.unshift(myColor);
             updateColors(newColors);
-            console.log(colors);
             var newCourse = new course(data["0"]["courseName"], data["0"]["courseNumber"], data["0"]["facId"],null, 
                                     data["0"]["lesson"]["profName"], myColor);
             for(var i=0; i < data.length; i++){
@@ -75,10 +74,7 @@ function App(){
             var newDisplay = {};
             Object.assign(newDisplay, optionsDisplay); //copying optionsDisplay dict
             newDisplay[newCourse.number] = "none";
-            console.log(newDisplay);
             setDispaly(newDisplay);
-
-
             console.log("new course obj ", newCourse);
           }
           
@@ -120,17 +116,7 @@ function App(){
  
 
 
-  function getBidingScore(myCourse){
-    const requestInfo = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({"name": myCourse.name, "number": myCourse.number, "faculltyId": myCourse.faculltyId,
-      "semester": myCourse.semester, "profName": myCourse.profName })
-    };
-
-    console.log("fetching /bidingScore")
-    fetch("/bidingScore", requestInfo).then(res => res.json()).then(data => console.log(data));
-  }
+  
 
   return(
     <div>
@@ -174,11 +160,10 @@ function App(){
     </div>
     <div id="section3">
       <p id="section3-headline">Biding Advicor</p>
-      <div id="biding-advicor"> </div>
+      <div id="biding-advicor"> <BidingAdvicor data={semesterAlist}/> </div>
     </div>
       
 
-    <button id="biding" onClick={() => getBidingScore(examplaeCourse)}> recomended score </button>
 
     </div>
   )
