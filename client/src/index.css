@@ -64,10 +64,8 @@ code {
 #weekly{
   flex:3;
   margin: 10px;
-  border: 1px solid purple;
   text-align: center;
   vertical-align: middle;
-  background-color: rgba(128, 128, 128, 0.231);
 }
 
 /* course list */
@@ -90,10 +88,6 @@ code {
   margin-right: 20px;
   margin-bottom: 0;
 }
-#semA-btn:hover , #semB-btn:hover{
-  font-weight: 400;
-  background-color: white;
-}
 
 #semA-btn{
   display: inline-block;
@@ -104,7 +98,6 @@ code {
   cursor: pointer;
   background-color: white;
   font-weight: 400;
-
 }
 
 #semB-btn{
@@ -117,7 +110,18 @@ code {
   font-weight: 200;
 }
 
-
+#errMsg{
+  font-family: 'Quicksand';
+  font-size: 11px;
+  background-color: rgba(0, 0, 0, 0.514);
+  color: white;
+  border-radius: 10px;
+  padding: 3px 7px;
+  margin: auto auto;
+  margin-bottom: 0;
+  margin-top: 4px;
+  width: max-content;
+}
 
 #list{
   height: 62vh;
@@ -129,7 +133,6 @@ code {
   text-align: center;
   overflow-y:scroll;
   overflow-x: hidden;
-
 }
 
 #input-course{
@@ -148,6 +151,8 @@ code {
 #entries-container{
   padding-right: 5px;
   padding-left: 5px;
+  margin-top: 10px;
+
 }
 
 #entry{
@@ -155,7 +160,6 @@ code {
   display: table;
   padding-bottom: 5px;
 }
-
 
 #listEntries{
   display: table-cell;
@@ -216,6 +220,148 @@ code {
   border-radius: 5px;
   background-color: rgba(239, 228, 228, 0.596);
 }
+
+
+/* Weekly*/
+
+#week-calender{
+  font-family: 'Quicksand';
+  display: grid;
+  grid-template-columns: 5vw 10.8vw 10.8vw 10.8vw 10.8vw 10.8vw 10.8vw; 
+  padding: 10px;
+  background-color: white;
+  border-radius: 20px;
+  grid-template-areas: "overlap";
+}
+
+#event{
+  background-color: rgba(0, 128, 0, 0.24);
+  border-radius: 3px;
+  grid-area: overlap;
+  grid-row-start: 3;
+  grid-row-end: 6;
+  grid-column-start: 4;
+  grid-column-end: 5;
+}
+
+
+
+.day{
+  font-size: 1.2vw;
+  font-weight: 500;
+  text-align: center;
+  padding: 10px 0;
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+
+}
+
+.hour{
+  font-size: 1vw;
+  font-weight: 200px;
+  text-align: center;
+  padding: 5px 0;
+  border-bottom: 0.4px solid rgba(152, 151, 151, 0.61);
+  grid-column-start: 1;
+  grid-column-end: 2;
+
+
+}
+
+.free-cell{
+  border-left: 1px solid;
+  border-bottom: 0.6px solid rgba(152, 151, 151, 0.61);
+}
+
+.free-cell[row="1"]{
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+.free-cell[row="2"]{
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+.free-cell[row="3"]{
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+.free-cell[row="4"]{
+  grid-row-start: 5;
+  grid-row-end: 6;
+}
+.free-cell[row="5"]{
+  grid-row-start: 6;
+  grid-row-end: 7;
+}
+.free-cell[row="6"]{
+  grid-row-start: 7;
+  grid-row-end: 8;
+}
+.free-cell[row="7"]{
+  grid-row-start: 8;
+  grid-row-end: 9;
+}
+.free-cell[row="8"]{
+  grid-row-start: 9;
+  grid-row-end: 10;
+}
+.free-cell[row="9"]{
+  grid-row-start: 10;
+  grid-row-end: 11;
+}
+.free-cell[row="10"]{
+  grid-row-start: 11;
+  grid-row-end: 12;
+}
+.free-cell[row="11"]{
+  grid-row-start: 12;
+  grid-row-end: 13;
+}
+.free-cell[row="12"]{
+  grid-row-start: 13;
+  grid-row-end: 14;
+}
+.free-cell[row="13"]{
+  grid-row-start: 14;
+  grid-row-end: 15;
+}
+.free-cell[row="14"]{
+  grid-row-start: 15;
+  grid-row-end: 16;
+}
+
+
+.free-cell[col="1"]{
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+.free-cell[col="2"]{
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+.free-cell[col="3"]{
+  grid-column-start: 4;
+  grid-column-end: 5;
+}
+.free-cell[col="4"]{
+  grid-column-start: 5;
+  grid-column-end: 6;
+}
+.free-cell[col="5"]{
+  grid-column-start: 6;
+  grid-column-end: 7;
+}
+.free-cell[col="6"]{
+  grid-column-start: 7;
+  grid-column-end: 8;
+}
+
+#last-line{
+  border-bottom: none;
+}
+
+
+/* Section 2 - exams*/
 
 #section2{
   display: flex;

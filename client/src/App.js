@@ -1,7 +1,7 @@
 import React from 'react';
 import 'animate.css';
 import BidingAdvicor from './BidingAdvicor';
-import { MdSmartButton } from 'react-icons/md';
+import Weekly from './Weekly';
 
 class course{
   constructor(name, number, faculltyId, semester, profName, color){
@@ -27,7 +27,7 @@ function App(){
   const [courseList, updateCourseList] = React.useState({"a": {list:[], ids:[]}, "b": {list:[], ids:[]}});
   const [optionsDisplay, setDispaly] = React.useState({});
   const [colors, updateColors] = React.useState(["#B9E9E3","#F8C8DC","#9DBBEA", "#FFFFD8","#FF9AA2", "#FFDAC1","#B5EAD7", "#C7CEEA", "#C6F1FE"]);
-
+  const [inputError, setErrorMsg] = React.useState(["none", ""]);
   /* input helpers */
 
   function handleChange(event){
@@ -58,8 +58,21 @@ function App(){
       fetch("/courseDetails", requestInfo)
       .then((res) => res.json())
         .then((data) => {
-          if (data["0"] === "course not found error"){
-            console.log("there was an error");
+          if (data.length === 0){
+            console.log("This course is not taught in semester " + semester);
+            setErrorMsg(["block", "This course is not taught in semester " + semester]);
+            setTimeout(() => {
+              setErrorMsg(["none", ""]);
+            }, 3000);
+          
+          }
+          else if (data["0"] === "course not found error"){
+            console.log("course not found");
+            setErrorMsg(["block", "course not found"]);
+            setTimeout(() => {
+              setErrorMsg(["none", ""]);
+            }, 2000);
+
           } else{
             const newColors = colors.map(color => color);
             const myColor = newColors.pop();
@@ -162,7 +175,7 @@ function App(){
         <div id="under-line"></div>
       </div>
       <div id="section1">
-        <div id="weekly"> weekly </div>
+        <div id="weekly"> <Weekly /> </div>
         <div id="courses-list">
           <div id="headline-container">
             <p id="list-headline"> Courses List </p>
@@ -172,7 +185,8 @@ function App(){
           <div id="list">
             <input id="input-course" type="text" value={userInput} onChange={handleChange}
               onClick={(e) => {clearInput(e)}} onKeyDown={(e) => enterPress(e)} maxLength="8" />
-            <i className="fa-regular fa-square-plus fa-xl" id="plus-icon" onClick={addNewEntry}></i>
+            <i className="fa-regular fa-square-plus fa-xl" id="plus-icon" onClick={addNewEntry}></i><br></br>
+           <div id="errMsg" className="animate__animated animate__fadeIn" style={{display: inputError[0]}}> <i class="fa-solid fa-triangle-exclamation"></i> {inputError[1]} </div>
             <ul id="entries-container">
               {courseList[semester].list.map((item) => (
                 <div id="entry" className="animate__animated animate__slideInDown">

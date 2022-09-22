@@ -79,7 +79,7 @@ app.post('/bidingScore' , async (req, res) => {
 /* uses course number to extract the following details about the course:
    course name, proffesors, faculty name, semester, class schedule*/
 app.post('/courseDetails' , async (req, res) => {
-    var i = 1, index = 0, name, profName, facName, semester, groupId, lesson, prevRecord, currRecord;
+    var i = 1, index = 0, name, profName="", facName, semester, groupId, lesson, prevRecord, currRecord, elem;
     var isLesson = true, hasPractices = false;
     var output = [], practice = [], times = [];
     const semesterTrans = {"א'" : "a", "ב'":"b", "ג'": "c"};
@@ -93,13 +93,14 @@ app.post('/courseDetails' , async (req, res) => {
     await page.click('#search');
     console.log("opened page ");
     try{
-        const elem = await page.$("#frmgrid");
+        elem = await page.$("#frmgrid");
         console.log(" got frmgrid try");
 
     } catch{
         console.log("failed");
+        elem = await page.$("#frmgrid");
     }
-    const elem = await page.$("#frmgrid");
+    //const elem = await page.$("#frmgrid");
     if (await elem.$('div[class = "msgerrs rounddiv"]') !== null){
         output.push("course not found error");
         console.log("course not found");
@@ -109,7 +110,9 @@ app.post('/courseDetails' , async (req, res) => {
         while (i < data.length){
             if (data[i].length != 1 && data[i][0].slice(0,6) == 'סילבוס'){ 
                 index = -1;
+                console.log(groupId +" , " + isLesson);
                 if(semester == req.body.semester){
+                    console.log(groupId);
                     if (isLesson){
                         lesson = new timeSlot(groupId, times, profName);
                         record = new courseTimeSlot(req.body.number, name, req.body.semester, facName, facIds[facName], lesson, []);
@@ -129,6 +132,9 @@ app.post('/courseDetails' , async (req, res) => {
                         practice.push(new timeSlot(groupId, times, profName));
                         hasPractices = true;
                     }
+                    profName = "";
+                    console.log(JSON.stringify(output));
+
                 }
                 times = []
                 
@@ -146,20 +152,34 @@ app.post('/courseDetails' , async (req, res) => {
                     }
                 }
                 else if (index >= 4){
-                    if (index == 4){
-                        profName = JSON.stringify(data[i][0]);
-                        profName = profName.slice(1,-1);
-                        profName = profName.replace(/\\/g, "");
-                    }
-                    if (data[i][1] == 'שיעור' || data[i][1] == 'שיעור ותרגיל'){
-                        isLesson = true;
+                    console.log(groupId +" , "+ data[i][1] +", "+ index);
+                    if (index !== 4 && profName !== "" && data[i][1] === ""){
+                        //there more than one teacher
+                        var additionalProf = JSON.stringify(data[i][0]);
+                        additionalProf = additionalProf.slice(1,-1);
+                        additionalProf = additionalProf.replace(/\\/g, "");
+                        if (!profName.includes(additionalProf)){
+                            profName += ", " + additionalProf;
+                            console.log("added teacher " + profName);
+                        }
+                        
                     } else{
-                        isLesson = false;
+                        if (index == 4){
+                            profName = JSON.stringify(data[i][0]);
+                            profName = profName.slice(1,-1);
+                            profName = profName.replace(/\\/g, "");
+                        }
+                        if (data[i][1] == 'שיעור' || data[i][1] == 'שיעור ותרגיל' || data[i][1] =='פרוייקט'){
+                            isLesson = true;
+                        } else{
+                            isLesson = false;
+                        }
+                        var day = data[i][4];
+                        var time = data[i][5];
+                        times.push([day, time]); //one lesson/practice can be seperated to multiple days
+                        semester = semesterTrans[data[i][6]]; 
                     }
-                    var day = data[i][4];
-                    var time = data[i][5];
-                    times.push([day, time]); //one lesson/practice can be seperated to multiple days
-                    semester = semesterTrans[data[i][6]];                
+                    
                 }
                 ++index;
             }
@@ -167,14 +187,18 @@ app.post('/courseDetails' , async (req, res) => {
             ++i;
         }
 
+        console.log("out of while " + JSON.stringify(output));
+
         if(hasPractices){
+            console.log("output is " + JSON.stringify(output));
             prevRecord = output.pop();
+            console.log("---" + prevRecord);
             prevRecord.setPractice(practice);
             output.push(prevRecord);
-        }
+        } 
 
         res.json(output);
-        }
+    }
 }) 
 
 
