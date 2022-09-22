@@ -1,6 +1,7 @@
 import React from 'react';
 import 'animate.css';
 import BidingAdvicor from './BidingAdvicor';
+import { MdSmartButton } from 'react-icons/md';
 
 class course{
   constructor(name, number, faculltyId, semester, profName, color){
@@ -19,10 +20,11 @@ function App(){
   //const linearExample = new course("linear algebra 1a", "03661111", "0300", "a", "", "#accc");
 
   /* states */
-  const [userInput, setInput] = React.useState("type course number");
-  const [semesterAlist, updateAList] = React.useState({
-    list: [],
-    ids: []});
+  const [slideArrowDisplay, setArrowDisplay] = React.useState("none"); //display slide arrows in biding advicor section
+  const [removeFromTotalScore, refreshTotalScore] = React.useState({"a":[], "b":[]}); //courses that should be removed from total sbiding advicor score
+  const [userInput, setInput] = React.useState("type course number"); //new course input
+  const [semester, viewSemester] = React.useState("a");
+  const [courseList, updateCourseList] = React.useState({"a": {list:[], ids:[]}, "b": {list:[], ids:[]}});
   const [optionsDisplay, setDispaly] = React.useState({});
   const [colors, updateColors] = React.useState(["#B9E9E3","#F8C8DC","#9DBBEA", "#FFFFD8","#FF9AA2", "#FFDAC1","#B5EAD7", "#C7CEEA", "#C6F1FE"]);
 
@@ -46,11 +48,11 @@ function App(){
   }
 
   function addNewEntry(){
-    if (userInput.length === 8 && !semesterAlist.ids.includes(userInput)){
+    if (userInput.length === 8 && !courseList[semester].ids.includes(userInput)){
       const requestInfo = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({"number": userInput, "semester": "a"})
+        body: JSON.stringify({"number": userInput, "semester": semester})
       };
   
       fetch("/courseDetails", requestInfo)
@@ -63,14 +65,17 @@ function App(){
             const myColor = newColors.pop();
             newColors.unshift(myColor);
             updateColors(newColors);
-            var newCourse = new course(data["0"]["courseName"], data["0"]["courseNumber"], data["0"]["facId"],null, 
+            var newCourse = new course(data["0"]["courseName"], data["0"]["courseNumber"], data["0"]["facId"], semester, 
                                     data["0"]["lesson"]["profName"], myColor);
             for(var i=0; i < data.length; i++){
               newCourse.timeOptions.push([data[i]["lesson"], data[i]["practice"]]);
             }
-            const newList = semesterAlist.list.concat(newCourse);
-            const newIds = semesterAlist.ids.concat(newCourse.number);
-            updateAList({list: newList, ids: newIds});
+            var newCourseList = {};
+            Object.assign(newCourseList, courseList);
+            const newList = courseList[semester].list.concat(newCourse);
+            const newIds = courseList[semester].ids.concat(newCourse.number);
+            newCourseList[semester] = {list: newList, ids: newIds};
+            updateCourseList(newCourseList);
             var newDisplay = {};
             Object.assign(newDisplay, optionsDisplay); //copying optionsDisplay dict
             newDisplay[newCourse.number] = "none";
@@ -79,6 +84,10 @@ function App(){
           }
           
         });
+
+        if(courseList[semester].ids.length > 5){
+          setArrowDisplay("block");
+        }
     }
 
     setInput("type course number");
@@ -89,14 +98,24 @@ function App(){
     var newColors = colors.map(color => color);
     newColors.push(entry.color);
     updateColors(newColors);
-    const newList = semesterAlist.list.filter(item => item.number !== entry.number);
-    const newIds = semesterAlist.ids.filter(id => id !== String(entry.number));
-    updateAList({list: newList, ids: newIds});
+    var newCourseList = {};
+    Object.assign(newCourseList, courseList);
+    const newList = courseList[semester].list.filter(item => item.number !== entry.number);
+    const newIds = courseList[semester].ids.filter(id => id !== String(entry.number));
+    newCourseList[semester] = {list: newList, ids: newIds};
+    updateCourseList(newCourseList);
     //removig item from optionsDisplay list
     const newDisplay = {};
     Object.assign(newDisplay, optionsDisplay); //copying optionsDisplay dict
     delete newDisplay[entry.number];
     setDispaly(newDisplay);
+    if (courseList[semester].ids.length < 8){
+      setArrowDisplay("none");
+    }
+    var newRemoveFromTotalScore = {"a":[], "b":[]};
+    newRemoveFromTotalScore[semester] = [entry.number];
+    refreshTotalScore([newRemoveFromTotalScore]);
+    console.log("--" + newRemoveFromTotalScore[semester]);
   }
 
   function changeOptionsDisplay(number){
@@ -113,10 +132,28 @@ function App(){
     setDispaly(newDisplay);
   }
 
- 
+  function switchSemester(newSemester){
+    viewSemester(newSemester);
+    const semA = document.getElementById("semA-btn");
+    const semB = document.getElementById("semB-btn");
 
+    if (newSemester === "a"){
+      semA.style.backgroundColor = "white";
+      semA.style.fontWeight = "400";
+      semA.style.borderWidth = "0.8px";
+      semB.style.backgroundColor = "whitesmoke";
+      semB.style.fontWeight = "200";
+      semB.style.borderWidth = "0.5px";
+    } else{
+      semB.style.backgroundColor = "white";
+      semB.style.fontWeight = "400";
+      semB.style.borderWidth = "0.8px";
+      semA.style.backgroundColor = "whitesmoke";
+      semA.style.fontWeight = "200";
+      semA.style.borderWidth = "0.5px";
+    }
+  }
 
-  
 
   return(
     <div>
@@ -127,13 +164,17 @@ function App(){
       <div id="section1">
         <div id="weekly"> weekly </div>
         <div id="courses-list">
-          <p id="list-headline"> Courses List </p>
+          <div id="headline-container">
+            <p id="list-headline"> Courses List </p>
+            <button id="semA-btn" onClick={() => switchSemester("a")}> semester A </button>
+            <button id="semB-btn" onClick={() => switchSemester("b")}> semester B </button>
+          </div>
           <div id="list">
             <input id="input-course" type="text" value={userInput} onChange={handleChange}
               onClick={(e) => {clearInput(e)}} onKeyDown={(e) => enterPress(e)} maxLength="8" />
             <i className="fa-regular fa-square-plus fa-xl" id="plus-icon" onClick={addNewEntry}></i>
             <ul id="entries-container">
-              {semesterAlist.list.map((item) => (
+              {courseList[semester].list.map((item) => (
                 <div id="entry" className="animate__animated animate__slideInDown">
                   <span key={item.number} id="listEntries" onClick={() => changeOptionsDisplay(item.number)} style={{backgroundColor: item.color}}> {item.name} - {item.number}
                     
@@ -160,7 +201,7 @@ function App(){
     </div>
     <div id="section3">
       <p id="section3-headline">Biding Advicor</p>
-      <div id="biding-advicor"> <BidingAdvicor data={semesterAlist}/> </div>
+      <div id="biding-advicor"> <BidingAdvicor data={courseList[semester]} arrows={slideArrowDisplay} removeFromTotalScore={removeFromTotalScore} refreshTotalScore={refreshTotalScore} semester={semester}/> </div>
     </div>
       
 

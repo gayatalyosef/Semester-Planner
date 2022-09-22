@@ -45,7 +45,16 @@ app.post('/bidingScore' , async (req, res) => {
     await page.type('input[name = "txtKurs"]', req.body.number);
     await page.select('select[name = "lstPageSize"]', "35")
     await page.click('.btnblues');
-    const elem = await page.$("#frmgrid")
+    console.log("opend biding serach page");
+    try{
+        const elem = await page.$("#frmgrid");
+        console.log(" got frmgrid try");
+    } catch{
+        console.log(" failed");
+    }
+    const elem = await page.$("#frmgrid");
+    console.log("got frmgrid");
+
     let results = await elem.$eval('table tbody', tbody => [...tbody.rows].map(r => [...r.cells].map(c => c.innerText)))
     var lastProf = "";
     for (i = 1; i < results.length - 2; ++i){
