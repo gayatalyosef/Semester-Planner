@@ -7,6 +7,7 @@ function BidingAdvicor(coursesInfo){
     "#F8C8DC":"#F8C8DC", "#B9E9E3":"#B9E9E3" };
     const [bidingScore, setBidingScore] = React.useState({"a":{}, "b":{}});
     const [totalScore, setTotalScore] = React.useState({"a": "-", "b": "-"});
+    const [backCoinFontSize, setBackCoinFontSize] = React.useState({"a":{}, "b":{}});
     const idlst = coursesInfo.data.ids;
     const semester = coursesInfo.semester;
 
@@ -52,26 +53,36 @@ function BidingAdvicor(coursesInfo){
             body: JSON.stringify({"name": course.name, "number": course.number, "faculltyId": course.faculltyId,
             "semester": course.semester, "profName": course.profName })
         };
-        console.log("fetching /bidingScore")
+        console.log("fetching /bidingScore");
         fetch("/bidingScore", requestInfo).then(res => res.json()).then(data =>{
             var newBidingScore = {};
             Object.assign(newBidingScore, bidingScore);
             newBidingScore[semester][course.number] = data;
             setBidingScore(newBidingScore);
-            var newTotalScore = {};
-            Object.assign(newTotalScore, totalScore);
-            if (totalScore[semester] === "-"){
-                newTotalScore[semester] = data;
-                setTotalScore(newTotalScore);
+            var newBackCoinFontSize = {};
+            Object.assign(newBackCoinFontSize, backCoinFontSize);
+            if (data !== "missing data..."){
+                newBackCoinFontSize[semester][course.number] = "30px";
+                var newTotalScore = {};
+                Object.assign(newTotalScore, totalScore);
+                if (totalScore[semester] === "-"){
+                    newTotalScore[semester] = data;
+                    setTotalScore(newTotalScore);
+                } else{
+                    newTotalScore[semester] = parseInt(totalScore[semester]) + parseInt(data);
+                    setTotalScore(newTotalScore);
+                }
             } else{
-                newTotalScore[semester] = parseInt(totalScore[semester]) + parseInt(data);
-                setTotalScore(newTotalScore);
+                newBackCoinFontSize[semester][course.number] = "10px";
             }
+            setBackCoinFontSize(newBackCoinFontSize);
+            console.log(newBackCoinFontSize[semester][course.number]);
         });
         
     }
 
     function flipCoin(coin, id){
+        console.log("flipping coin");
         //calc score at backend
         if (!(coin.number in bidingScore[semester])){
             getBidingScore(coin);
@@ -107,21 +118,21 @@ function BidingAdvicor(coursesInfo){
                 In the event that a lecturer teaches the course for the first time, the tool will return the maximum closing score from the last few years. </p>
             
             <div id="slider-container">
-                <MdChevronLeft id="slider-arrows" size={30} onClick={slideLeft} style={{display: coursesInfo.arrows}}/>
+                <MdChevronLeft id="slider-arrows" size={30} onClick={slideLeft} style={{display: coursesInfo.arrows[semester]}}/>
                 <div id="slider">      
                     {coursesInfo.data.list.map((course) =>
                         <div className="biding-coin" id={idlst.indexOf(course.number)} onClick={() => flipCoin(course, idlst.indexOf(course.number))} direction="front">
                                 <div id="biding-circle" className="animate__animated animate__flipInY" style={{backgroundColor: course.color}}> 
                                     <div id="decor" style={{borderColor: course.color }}> </div>
                                     <div id="coin-front"> <p id="coin-course-name">{course.name}</p> </div>
-                                    <div id="coin-back" > <h3 id="coin-score"> {bidingScore[semester][course.number]}</h3></div>
+                                    <div id="coin-back" style={{fontSize: backCoinFontSize[semester][course.number]}}> <h3 id="coin-score"> {bidingScore[semester][course.number]}</h3></div>
                                 </div>
     
                         </div>
                     )}
 
                 </div>
-                <MdChevronRight id="slider-arrows" size={30} onClick={slideRight} style={{display: coursesInfo.arrows}}/> 
+                <MdChevronRight id="slider-arrows" size={30} onClick={slideRight} style={{display: coursesInfo.arrows[semester]}}/> 
             </div>
             <p id="total-points"> Total points required: {totalScore[semester]} </p>
             <p id="total-points-exp"> <i className="fa-solid fa-circle-info"></i> click on a course to add it to the calculation </p>

@@ -7,6 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: whitesmoke;
+
 }
 
 code {
@@ -36,63 +37,65 @@ code {
   align-items: center;
   align-content: center;
   position:relative;
+  height: 15vh;
+  background-color: rgba(0, 0, 0, 0.856);
+  color: white;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 5px;
 }
 
 #main-headline{
   font-family: 'Patrick Hand SC';
-  font-size: 50px;
+  font-size: 8.5vh;
   letter-spacing: 2.5px;
   vertical-align: middle;
   text-align: center;
-}
-
-#under-line{
-  position: relative;
-  width: 85vw;
-  border-bottom: 0.8px solid black;
-  border-radius: 30px;
-  margin:auto;
-  bottom:15px;
+  margin-top: 0px;
+  padding-top: 5px;
 }
 
 #section1{
   display: flex;
   height: 80vh;
-  border: 1px solid blue;
 }
 
 #weekly{
   flex:3;
   margin: 10px;
+  margin-left: 30px;
   text-align: center;
   vertical-align: middle;
+
 }
 
 /* course list */
 #courses-list{
   flex: 1;
   margin: 10px;
+  margin-right: 20px;
   align-items: center;
 }
 
-#headline-container{
+#courses-container{
   display: block;
 }
 
 #list-headline{
   display: inline-block;
   font-family: 'Quicksand';
-  font-size: 18px;
+  font-size: 1.35vw;
   font-weight: 400;
   margin-left: 15px;
   margin-right: 20px;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 #semA-btn{
   display: inline-block;
   font-family: 'Quicksand';
-  font-size: 12px;
+  font-size: 0.9vw;
   border: 0.8px solid #555;
   border-radius: 10px 0 0 10px;
   cursor: pointer;
@@ -102,7 +105,7 @@ code {
 
 #semB-btn{
   font-family: 'Quicksand';
-  font-size: 12px;
+  font-size: 0.9vw;
   border: 0.5px solid #555;
   border-radius: 0 10px 10px 0;
   cursor: pointer;
@@ -124,7 +127,7 @@ code {
 }
 
 #list{
-  height: 62vh;
+  height: 70vh;
   background-color: white;
   border-radius: 30px;
   margin:10px 0;
@@ -138,7 +141,7 @@ code {
 #input-course{
   width: 70%;
   font-family: 'Quicksand';
-  font-size: 14px;
+  font-size: 1.05vw;
   color: gray;
   margin-right: 5px;
 }
@@ -152,7 +155,6 @@ code {
   padding-right: 5px;
   padding-left: 5px;
   margin-top: 10px;
-
 }
 
 #entry{
@@ -161,17 +163,20 @@ code {
   padding-bottom: 5px;
 }
 
+#entry-course-name{
+  margin: 0;
+}
+
 #listEntries{
   display: table-cell;
   height: 40px;
   width: 20vw;
-  font-size: 13px;
+  font-size: 1.01vw;
   border-radius: 10px;
   padding: 5px;
   text-align: right;
   padding-right: 15px;
   vertical-align: middle;
-
 }
 
 #listEntries:hover{
@@ -193,7 +198,7 @@ code {
 
 
 #option{
-  font-size: 11px;
+  font-size: 0.86vw;
   background-color: white;
   border-radius: 10px;
   padding: 5px;
@@ -208,21 +213,35 @@ code {
   line-height: 20px;
   margin:0;
   padding-right: 1px;
+  border-radius: 5px;
+
 }
 
 #practice{
   line-height: 20px;
   margin:4px 0;
   padding-right: 15px;
+  border-radius: 5px;
+
 }
 
 #lesson:hover, #practice:hover{
-  border-radius: 5px;
-  background-color: rgba(239, 228, 228, 0.596);
+  background-color: rgba(239, 228, 228, 0.596) ;
 }
+/* rgba(239, 228, 228, 0.596) */
 
 
 /* Weekly*/
+
+#hours-counter{
+  font-family: 'Quicksand';
+  font-weight: 400;
+  font-size: 1.1vw;
+  text-align: left;
+  margin-left: 20px;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
 
 #week-calender{
   font-family: 'Quicksand';
@@ -232,19 +251,29 @@ code {
   background-color: white;
   border-radius: 20px;
   grid-template-areas: "overlap";
+  align-content: center;
 }
 
 #event{
-  background-color: rgba(0, 128, 0, 0.24);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-family: 'Fredoka';
+  font-weight: 400;
+  font-size: 0.9vw;
+  opacity: 0.85;
   border-radius: 3px;
   grid-area: overlap;
-  grid-row-start: 3;
-  grid-row-end: 6;
-  grid-column-start: 4;
-  grid-column-end: 5;
+  margin-right:0.1px;
+  direction: rtl;
+  text-align: center;
+  border:0.5px solid #888;
+  overflow: hidden;
 }
 
-
+#event-content{
+  margin: 0;
+}
 
 .day{
   font-size: 1.2vw;
@@ -264,8 +293,6 @@ code {
   border-bottom: 0.4px solid rgba(152, 151, 151, 0.61);
   grid-column-start: 1;
   grid-column-end: 2;
-
-
 }
 
 .free-cell{
@@ -366,25 +393,241 @@ code {
 #section2{
   display: flex;
   margin-top: 15px;
-  height: 100px;
-  border: 1px solid blue;
+  height: max-content;
 }
 
 #exams-calender{
   flex:5;
   margin: 10px;
-  border: 1px solid purple;
-  text-align: center;
   vertical-align: middle;
-  background-color: rgba(128, 128, 128, 0.231);
 }
 
 #exams-list{
   flex: 2;
-  margin: 10px;
-  border: 1px solid green;
-  background-color: rgba(128, 128, 128, 0.231);
+  margin: 10px;  height: max-content;
 }
+
+#exams-list-headline{
+  display: inline-block;
+  font-family: 'Quicksand';
+  font-size: 1.35vw;
+  font-weight: 400;
+  margin-left: 15px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+#exams-list-container{
+  background-color: white;
+  border-radius: 30px;
+  align-items: center;
+  height: 50vh;
+  margin-top: 5px;
+  padding-top: 12px;
+  overflow-y: scroll;
+}
+
+#exam-entry{
+  display: table;
+  align-items: center;
+  font-family: 'Fredoka';
+  font-size: 1vw;
+  padding-right: 10px;
+  text-align: right;
+  margin-bottom: 5px;
+  margin-top: 0;
+  margin-left: 0;
+
+}
+
+#exam-list-text-container{
+  display: table-cell;
+  width: 23vw;
+  border-radius: 10px;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+#exam-calnedar-headline{
+  display: inline-block;
+  font-family: 'Quicksand';
+  font-size: 1.35vw;
+  font-weight: 400;
+  margin-left: 100px;
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+
+/* Exam calendar */
+.react-calendar {
+  width: 350px;
+  max-width: 100%;
+  background: white;
+  border-radius: 8px;
+  font-family: 'Quicksand';
+  line-height: 1.125em;
+  margin: auto auto;
+}
+.react-calendar--doubleView {
+  width: 700px;
+}
+.react-calendar--doubleView .react-calendar__viewContainer {
+  display: flex;
+  margin: -0.5em;
+}
+.react-calendar--doubleView .react-calendar__viewContainer > * {
+  width: 50%;
+  margin: 1.2em;
+  margin-top: 0;
+}
+
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.react-calendar button {
+  font-family: 'Quicksand';
+  margin: 0;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+
+}
+.react-calendar button:enabled:hover {
+  cursor: pointer;
+}
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+}
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 15px;
+  color: rgb(46, 114, 223);
+}
+.react-calendar__navigation button:disabled {
+  background-color: #f0f0f0;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #757575;
+  opacity: 0;
+}
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+  padding: 2em 0.5em;
+}
+.react-calendar__tile {
+  max-width: 100%;
+  padding: 10px 6.6667px;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+}
+.react-calendar__tile:disabled {
+  background-color: #f0f0f0;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__tile--now {
+  background-color: #ffff76c9;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #ffffa9;
+}
+.react-calendar__tile--hasActive {
+  background: #76baff;
+}
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #a9d4ff;
+}
+/* this is the style for clicked date*/
+.react-calendar__tile--active {
+  background: #006edc;
+  color: white;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #1087ff;
+}
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #e6e6e6;
+}
+
+.selectedC6F1FE{
+  background-color: #C6F1FE;
+}
+.selectedC7CEEA--neineighboringMonth{
+  background-color: white;
+}
+.selectedC7CEEA{
+  background-color: #C7CEEA;
+}
+.selectedB5EAD7{
+  background-color: #B5EAD7;
+}
+.selectedB5EAD7--neineighboringMonth{
+  background-color: none;
+}
+.selectedFFDAC1{
+  background-color: #FFDAC1;
+}
+.selectedFF9AA2{
+  background-color: #FF9AA2;
+}
+.selectedFFFFD8{
+  background-color: #FFFFD8;
+}
+.selected9DBBEA{
+  background-color: #9DBBEA;
+}
+.selectedF8C8DC{
+  background-color: #F8C8DC;
+}
+.selectedB9E9E3{
+  background-color: #B9E9E3;
+}
+/*diabling neighboringMonth*/
+.--neighboringMonth {
+  color: white;
+  background-color: none;
+}
+
 
 
 /* Biding Advicor section*/
@@ -392,6 +635,7 @@ code {
 #section3{
   height: max-content;
   padding-bottom: 100px;
+  margin-top: 30px;
 }
 
 #section3-headline{
@@ -483,7 +727,6 @@ code {
 #coin-back {
   font-family: 'Quicksand';
   font-weight: 200;
-  font-size: 30px;
 }
 
 

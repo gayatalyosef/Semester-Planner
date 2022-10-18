@@ -25,6 +25,7 @@ function Weekly(){
 
     return(
         <div>
+            <p id="hours-counter">  Hours: </p>
             <div id="week-calender"> 
                 <div> </div>
                 <div className="day"> Sunday </div>
@@ -34,33 +35,33 @@ function Weekly(){
                 <div className="day"> Thursday </div>
                 <div className="day"> Friday </div>
                 <div className="hour"> 8:00 </div>
-                <div className="free-cell" row="1" col="1">1</div>
-                <div className="free-cell" row="1" col="2">2</div>
-                <div className="free-cell" row="1" col="3">3</div>
-                <div className="free-cell" row="1" col="4">4</div>
-                <div className="free-cell" row="1" col="5">5</div>
-                <div className="free-cell" row="1" col="6">6</div>
+                <div className="free-cell" row="1" col="1"></div>
+                <div className="free-cell" row="1" col="2"></div>
+                <div className="free-cell" row="1" col="3"></div>
+                <div className="free-cell" row="1" col="4"></div>
+                <div className="free-cell" row="1" col="5"></div>
+                <div className="free-cell" row="1" col="6"></div>
                 <div className="hour"> 9:00 </div>
-                <div className="free-cell" row="2" col="1" >7</div>
-                <div className="free-cell" row="2" col="2">8</div>
-                <div className="free-cell" row="2" col="3" >9</div>
-                <div className="free-cell" row="2" col="4">10</div>
-                <div className="free-cell" row="2" col="5">11</div>
-                <div className="free-cell" row="2" col="6">12</div>
+                <div className="free-cell" row="2" col="1"></div>
+                <div className="free-cell" row="2" col="2"></div>
+                <div className="free-cell" row="2" col="3"></div>
+                <div className="free-cell" row="2" col="4"></div>
+                <div className="free-cell" row="2" col="5"></div>
+                <div className="free-cell" row="2" col="6"></div>
                 <div className="hour"> 10:00 </div>
-                <div className="free-cell" row="3" col="1">13</div>
-                <div className="free-cell" row="3" col="2">14</div>
-                <div className="free-cell" row="3" col="3">15</div>
-                <div className="free-cell" row="3" col="4">16</div>
-                <div className="free-cell" row="3"col="5">17</div>
-                <div className="free-cell" row="3" col="6">18</div>
+                <div className="free-cell" row="3" col="1"></div>
+                <div className="free-cell" row="3" col="2"></div>
+                <div className="free-cell" row="3" col="3"></div>
+                <div className="free-cell" row="3" col="4"></div>
+                <div className="free-cell" row="3" col="5"></div>
+                <div className="free-cell" row="3" col="6"></div>
                 <div className="hour"> 11:00 </div>
-                <div className="free-cell" row="4" col="1">19</div>
-                <div className="free-cell" row="4" col="2">20</div>
-                <div className="free-cell" row="4" col="3">21</div>
-                <div className="free-cell" row="4" col="4">22</div>
-                <div className="free-cell" row="4" col="5">23</div>
-                <div className="free-cell" row="4" col="6">24</div>
+                <div className="free-cell" row="4" col="1"></div>
+                <div className="free-cell" row="4" col="2"></div>
+                <div className="free-cell" row="4" col="3"></div>
+                <div className="free-cell" row="4" col="4"></div>
+                <div className="free-cell" row="4" col="5"></div>
+                <div className="free-cell" row="4" col="6"></div>
                 <div className="hour"> 12:00 </div>
                 <div className="free-cell" row="5" col="1"></div>
                 <div className="free-cell" row="5" col="2"></div>
