@@ -2,7 +2,7 @@ import React from 'react';
 import 'animate.css';
 import {MdChevronLeft, MdChevronRight} from 'react-icons/md'
 
-function BidingAdvicor(coursesInfo){
+function BidingAdvisor(coursesInfo){
     const darkerColors = {"#C6F1FE":"#add3de", "#C7CEEA":"#b1b7d2", "#B5EAD7":"#99c7b6","#FFDAC1":"#e9c6b0", "#FF9AA2":"#FF9AA2", "#FFFFD8":"#FFFFD8", "#9DBBEA":"#9DBBEA",
     "#F8C8DC":"#F8C8DC", "#B9E9E3":"#B9E9E3" };
     const [bidingScore, setBidingScore] = React.useState({"a":{}, "b":{}});
@@ -113,7 +113,7 @@ function BidingAdvicor(coursesInfo){
 
     return(
         <div> 
-            <p id="biding-advicor-explain"> The biding advicor tool calculates the recomended number of points for each course for the biding.<br></br>
+            <p id="biding-advisor-explain"> The biding advisor tool calculates the recomended number of points for each course for the biding.<br></br>
                 The recommended score is determined by the statistics of the closing scores from previous years with the same lecturer.<br></br>
                 In the event that a lecturer teaches the course for the first time, the tool will return the maximum closing score from the last few years. </p>
             
@@ -143,4 +143,4 @@ function BidingAdvicor(coursesInfo){
 }
 
 
-export default BidingAdvicor;
+export default BidingAdvisor;
