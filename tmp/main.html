@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Semester Planner</title>
+</meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- React related imports  --> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.14.0/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script> 
+
+<!-- style and fonts -->
+<!-- <link rel="stylesheet" href="test.css"> -->
+<script src="https://kit.fontawesome.com/15a7b87dbf.js" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cookie&family=Nunito:wght@200;300;800;900&family=Roboto+Flex:opsz,wght@8..144,200;8..144,300;8..144,400;8..144,600;8..144,700;8..144,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="headLineSection"> 
+        <h1> Semester Planner</h1>
+    </div>
+
+    <div id="weeklySection">
+        <div id="weekly"> weekly</div>
+    </div>
+
+
+    <div id="ExamsSection">
+        <div id="exams"> exams </div>
+    </div>
+
+
+    <div id="BidingAdvisorSection">
+        <div id='biding'> </div>
+    </div>
+
+
+    <script type="text/babel">
+        import 'bidingScraper.js';
+        const require = createRequire();
+
+        class course{
+            constructor(name, number, faculltyId, semester, profName, color){
+            this.name = name;
+            this.number = number;
+            this.faculltyId = faculltyId;
+            this.semester = semester;
+            this.profName = profName;
+            this.color = color;
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('biding'));
+
+        function BidingAdvicor(){
+
+            return(
+                <div> <p> rendering.... {}</p>
+                    </div>
+
+            );
+            
+        }
+
+
+        root.render(<BidingAdvicor/>)
+
+
+
+
+    </script>
+
+    
+
+
+        
+
+
+</body>
+</html>
