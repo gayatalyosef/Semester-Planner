@@ -2,7 +2,9 @@ import React from 'react';
 import 'animate.css';
 import Calendar from 'react-calendar';
 //import 'react-calendar/dist/Calendar.css';
-import BidingAdvicor from './BidingAdvicor';
+import BidingAdvisor from './BidingAdvisor';
+import {MdOutlineArrowDropDown} from 'react-icons/md'
+
 
 class course{
   constructor(name, number, faculltyId, semester, profName, color){
@@ -47,16 +49,19 @@ class exam{
 
 function App(){
   /* states */
-  //Biding Advicor
-  const [slideArrowDisplay, setArrowDisplay] = React.useState({"a":"none", "b":"none"}); //display slide arrows in biding advicor section
-  const [removeFromTotalScore, refreshTotalScore] = React.useState({"a":[], "b":[]}); //courses that should be removed from total sbiding advicor score
+  //dropDown menu
+  const [dropDownDisplay, setDropDownDisplay] = React.useState("none")
+  //Biding Advisor
+  const [slideArrowDisplay, setArrowDisplay] = React.useState({"a":"none", "b":"none"}); //display slide arrows in biding advisor section
+  const [removeFromTotalScore, refreshTotalScore] = React.useState({"a":[], "b":[]}); //courses that should be removed from total sbiding advisor score
   //Course List
   const [userInput, setInput] = React.useState("type course number"); //new course input
   const [semester, viewSemester] = React.useState("a");
   const [courseList, updateCourseList] = React.useState({"a": {list:[], ids:[]}, "b": {list:[], ids:[]}});
   const [optionsDisplay, setDispaly] = React.useState({});
   const colors = ["#C6F1FE", "#C7CEEA", "#B5EAD7", "#FFDAC1",  "#FF9AA2", "#FFFFD8", "#9DBBEA","#F8C8DC","#B9E9E3"];
-  var colorIndex = 0;
+  const [colorIndexManager, updateColorIndex] = React.useState({"a":[0,1,2,3,4,5,6,7,8], "b":[0,1,2,3,4,5,6,7,8]});
+  var colorListIndex = 0;
   const [inputError, setErrorMsg] = React.useState(["none", ""]);
   //Weekly
   const columsIndexs = ["1","2","3","4","5","6"];
@@ -68,6 +73,7 @@ function App(){
   //Exam-Calender
   const [isFirstExam, updateIsFirstExam] = React.useState({"a": true, "b":true});
   const [calendarDate, setExamCalendarDate] = React.useState(new Date());
+  const calendarRef = React.useRef(null);
 
 
   /* Course List functions */
@@ -124,8 +130,13 @@ function App(){
             }, 2000);
           } else{
             //console.log(data);
-            colorIndex = (courseList[semester].ids.length < colors.length) ? courseList[semester].ids.length:(courseList[semester].ids.length - colors.length);
-            const myColor = colors[colorIndex];
+            colorListIndex = (courseList[semester].ids.length < colors.length) ? courseList[semester].ids.length:(courseList[semester].ids.length - colors.length);
+            const myColor = colors[colorIndexManager[semester][0]]; 
+            var newColorIndex = {};
+            Object.assign(newColorIndex, colorIndexManager);
+            var firstIndex = newColorIndex[semester].shift();
+            newColorIndex[semester].push(firstIndex);
+            updateColorIndex(newColorIndex);
             var newCourse = new course(data["0"]["courseName"], data["0"]["courseNumber"], data["0"]["facId"], semester, 
                                     data["0"]["lesson"]["profName"], myColor);
             for(var i=0; i < data.length - 1; i++){
@@ -194,6 +205,15 @@ function App(){
   }
 
   function removeEntry(entry){
+    var newColorIndex = {};
+    Object.assign(newColorIndex, colorIndexManager);
+    if(courseList[semester].ids[courseList[semester].ids.length-1] === entry.number){
+      //deleting the last entry
+      console.log("last elem");
+      newColorIndex[semester].unshift(colorIndexManager[semester].pop());
+    }
+    console.log(newColorIndex);
+
     var newCourseList = {};
     Object.assign(newCourseList, courseList);
     const newList = courseList[semester].list.filter(item => item.number !== entry.number);
@@ -205,7 +225,7 @@ function App(){
     Object.assign(newDisplay, optionsDisplay); //copying optionsDisplay dict
     delete newDisplay[entry.number];
     setDispaly(newDisplay);
-    //updates for bidind advicor
+    //updates for bidind advisor
     if (courseList[semester].ids.length < 8){
       var newArrowDispaly = {};
       Object.assign(newArrowDispaly, slideArrowDisplay); 
@@ -238,7 +258,6 @@ function App(){
     var newExamsList = {};
     Object.assign(newExamsList, sortedExamsList);
     newExamsList[semester] = newExamsList[semester].filter((examObj) => examObj.courseNumber !== entry.number);
-    console.log(newExamsList);
     updateExamList(newExamsList);
   }
 
@@ -276,11 +295,19 @@ function App(){
       semA.style.fontWeight = "200";
       semA.style.borderWidth = "0.5px";
     }
-
     if(sortedExamsList[newSemester].length > 0){
       setExamCalendarDate(new Date(sortedExamsList[newSemester][0].year, sortedExamsList[newSemester][0].month-1, 1));
     } else{
       setExamCalendarDate(new Date());
+    }
+  }
+
+  function dropDown(){
+    console.log("dropDown function");
+    if(dropDownDisplay === "none"){
+      setDropDownDisplay("block");
+    } else{
+      setDropDownDisplay("none");
     }
   }
 
@@ -406,10 +433,10 @@ function App(){
       if (i === 0){
         overlapChain[0].overlapMargin = "1px";
       } else{
-        overlapChain[i].overlapMargin = String((10.8/overlapChain.length)*i) +"vw";
+        overlapChain[i].overlapMargin = String((10.6/overlapChain.length)*i) +"vw";
       }
       overlapChain[i].overlap = overlapChain.length;
-      overlapChain[i].colWidth = 10.65;
+      overlapChain[i].colWidth = 10.45;
       fullText = overlapChain[i].groupId + " - " + overlapChain[i].courseName;
       if (fullText > 79 || overlapChain.length >= 3 || ((overlapChain[i].rowEnd - overlapChain[i].rowStart < 2) && overlapChain.length >= 2)
       || (fullText.length > 40 && overlapChain.length > 1)){
@@ -422,13 +449,13 @@ function App(){
     partialOverlap.sort((event1, event2) => {
       return event1.overlapMargin - event2.overlapMargin;
     });
-    var colWidth = 10.65;
+    var colWidth = 10.45;
 
     //position partialOverlap events
     for (i=0; i < partialOverlap.length; i++){
       if (i===0){
-        colWidth = 10.65 - (partialOverlap[0].overlapMargin * (10.8/overlapChain.length));
-        partialOverlap[i].overlapMargin = String((10.9/overlapChain.length) * partialOverlap[i].overlapMargin) +"vw";
+        colWidth = 10.45 - (partialOverlap[0].overlapMargin * (10.6/overlapChain.length));
+        partialOverlap[i].overlapMargin = String((10.7/overlapChain.length) * partialOverlap[i].overlapMargin) +"vw";
         partialOverlap[i].overlapMargin = (partialOverlap[i].overlapMargin === "0vw") ? "1px" : partialOverlap[i].overlapMargin;
       } else{
         partialOverlap[i].overlapMargin = String((10.75 - colWidth) + ((colWidth/partialOverlap.length) * i)) +"vw";
@@ -493,19 +520,25 @@ function App(){
   return(
     <div>
       <div id="headline-container">
+        <div id="dropDown-menu" onClick={dropDown}>
+          <p id="dropDown-info"> Info </p>
+          <MdOutlineArrowDropDown id="dropDownArrow" size={25}/>
+        </div>
         <h1 id="main-headline"> Semester Planner </h1>
       </div>
+      <div id="dropDown" className="animate__animated animate__fadeIn" style={{display: dropDownDisplay}}> The information is current for: 2022/2023 תשפ"ג</div>
+
       <div id="section1">
         <div id="weekly"> 
         <p id="hours-counter">  Hours: {hoursCounter[semester]}</p>
             <div id="week-calender"> 
                 <div> </div> 
-                <div className="day"> Sunday </div>
-                <div className="day"> Monday </div>
-                <div className="day"> Tuesday </div>
-                <div className="day"> Wednesday </div>
-                <div className="day"> Thursday </div>
-                <div className="day"> Friday </div>
+                <div className="day">  Sunday <div id="divider-line"></div></div>
+                <div className="day"> Monday <div id="divider-line"></div></div>
+                <div className="day"> Tuesday <div id="divider-line"></div></div>
+                <div className="day"> Wednesday <div id="divider-line"></div></div>
+                <div className="day"> Thursday <div id="divider-line"></div></div>
+                <div className="day"> Friday <div id="divider-line"></div></div>
                 <div className="hour"> 8:00 </div>
                 {columsIndexs.map((colIndex) => 
                  <div className="free-cell" row="1" col={colIndex}></div>
@@ -614,29 +647,29 @@ function App(){
             onChange={setExamCalendarDate}
             value={calendarDate}
             showDoubleView={true}
-            showNeighboringMonth= {false}
             locale={"ENG"}
             calendarType={'Hebrew'}
             minDetail='year'
-            tileClassName={(date) => addTileClassName(date)}/>
+            tileClassName={(date) => addTileClassName(date)}
+            ref={calendarRef}/>
         </div>
       </div>
       <div id="exams-list"> 
         <p id="exams-list-headline"> Exam schedule </p>
         <div id="exams-list-container">
           {sortedExamsList[semester].map((exam) => (
-              <ul id="exam-entry"> 
-                <div id="exam-list-text-container" className="animate__animated animate__flipInX" style={{backgroundColor: exam.color}}>
+              <ul id="exam-entry" style={{backgroundColor: exam.color}}> 
+                <span id="exam-list-text-container" className="animate__animated animate__flipInX">
                   <p> {exam.courseName} - {exam.year}/{exam.month}/{exam.day}  (מועד {exam.moed})</p>
-                </div>
+                </span>
               </ul>
           ))}
         </div>
       </div>
     </div>
     <div id="section3">
-      <p id="section3-headline">Biding Advicor</p>
-      <div id="biding-advicor"> <BidingAdvicor data={courseList[semester]} arrows={slideArrowDisplay} removeFromTotalScore={removeFromTotalScore} refreshTotalScore={refreshTotalScore} semester={semester}/> </div>
+      <p id="section3-headline">Biding Advisor</p>
+      <div id="biding-advisor"> <BidingAdvisor data={courseList[semester]} arrows={slideArrowDisplay} removeFromTotalScore={removeFromTotalScore} refreshTotalScore={refreshTotalScore} semester={semester}/> </div>
     </div>
       
 
