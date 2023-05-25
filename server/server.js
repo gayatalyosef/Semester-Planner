@@ -6,11 +6,7 @@ const app = express()
 const PORT = 5000
 
 app.use(express.json());
-app.use(bodyParse.json());
-
-//This will create a middleware (FOR HEROKU)
-//When you navigate to the root page, it would use the built react-app
-app.use(express.static(path.resolve(__dirname, "./client/build")));
+app.use(bodyParse.json())
 
 /* represents one choice option for the course (lesston + practice time slot option) */
 let courseTimeSlot = class{

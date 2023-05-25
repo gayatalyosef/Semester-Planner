@@ -314,6 +314,7 @@ code {
 }
 
 #event-content{
+  font-family: 'Segoe UI';
   margin: 0;
 }
 
@@ -480,7 +481,7 @@ code {
 
 #exam-entry{
   align-items: center;
-  font-family: 'Rubik';
+  font-family:'Segoe UI';
   font-size: 1vw;
   padding-right: 10px;
   margin-bottom: 5.5px;
