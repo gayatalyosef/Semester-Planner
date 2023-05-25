@@ -18,7 +18,8 @@ run the following command in Semester-Planner\**server** folder: npm run dev
 Ensure that you have NodeJs version 16.17.0 or a higher installed.
 
 
-
-
-
+**Upcoming developments:**
+* Implementation of search by course name
+* Integration of sharing options for Calendar and WhatsApp
+* Addition of a functionality to create multiple schedules
 
