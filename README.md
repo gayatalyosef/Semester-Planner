@@ -18,7 +18,7 @@ https://github.com/gayatalyosef/Semester-Planner/assets/92454507/85e30cbb-5c75-4
 
 run the following command in server folder: npm run dev
 
-Ensure that you have NodeJs version 16.17.0 or a higher installed.
+Ensure that you have NodeJs version 16.17.0 or higher installed.
 
 
 
